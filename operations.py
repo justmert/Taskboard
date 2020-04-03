@@ -1,7 +1,7 @@
 import task
 from jsonparse import writejson_task
 from archive import writejson_archive
-from render import render_items, render_oneline
+from render import render_items, renderr_oneline
 import pyperclip
 import os
 render_pref = {"success": None, "print": True}
