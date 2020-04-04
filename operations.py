@@ -16,24 +16,23 @@ def parse_boards(arg):
             boards.append(''.join(item[1:]))
             indexes.append(index)
     args = [y for x, y in enumerate(args) if x not in indexes]
-    desc = ' '.join(args)
-    return desc, boards
+    header = ' '.join(args)
+    return header, boards
 
 
-def add_item(arg, item_type, special_num=None):
+def add_item(arg, item_type, detail=None):
     if not arg:
         render_pref['success'] = False
         return
-    desc, boards = parse_boards(arg)
+    header, boards = parse_boards(arg)
     num = task.items[-1]["number"]+1 if task.items else 1
-    if special_num:
-        num = special_num
     note_type = item_type
     prior = 1
+    det = detail if detail else None
     boards.append("My Board")
     status = "undone"
-    task.items.append(
-        task.Task(note_type, num, desc, status, prior, boards).to_dict())
+    task.items.append(task.Task(note_type, num, header,
+                                detail, status, prior, boards).to_dict())
     writejson_task()
     render_pref['success'] = True
 
@@ -58,7 +57,7 @@ def delete(nums):
 
 
 def find(arg):
-    found = [x for x in task.items if arg in x['description']]
+    found = [x for x in task.items if arg in x['header']]
     render_pref['success'] = True if found else False
     if render_pref['success']:
         render_pref['print'] = False
@@ -73,7 +72,7 @@ def copy(nums):
     found = [x for x in task.items if x['number'] == nums[0]]
     render_pref['success'] = True if found else False
     if render_pref['success']:
-        pyperclip.copy(found[0]['description'])
+        pyperclip.copy(found[0]['header'])
 
 
 def restore(nums):
@@ -162,13 +161,13 @@ def list_all():
 
 def edit(arg):
     render_pref['success'] = False
-    num, desc = arg.lsplit(" ", 1) if " " in arg else (arg, "")
-    if not desc:
+    num, header = arg.lsplit(" ", 1) if " " in arg else (arg, "")
+    if not header:
         return
     for item in task.items:
         if item['number'] == num:
             render_pref['success'] = True
-            item['description'] = desc
+            item['header'] = header
 
     writejson_task() if render_pref['success'] else None
 

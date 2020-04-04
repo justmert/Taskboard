@@ -18,7 +18,7 @@ def render_items(arg_list=None, board="My board"):
     arg_list = arg_list if arg_list else task.items
     print("\n {0} {1}".format(icons['heart'], board))
     counts = {"in-progress": 0, "done": 0, "undone": 0, "note": 0}
-
+    percent = 0
     for item in arg_list:
         if item['type'] == "note":
             counts['note'] += 1
@@ -28,7 +28,7 @@ def render_items(arg_list=None, board="My board"):
         percent = 0 if sum == 0 else int((100 * counts['done'])/sum)
         print("{0}. ".format(item['number']).rjust(6), end="")
         print("{0}  {1} ".format(icons['note'] if item['type'] == "note" else icons[item['status']],
-                                 item['description']), end='')
+                                 item['header']), end='')
         print("{0} {1}".format(
             icons[item['priority']], icons['star'] if item['starred'] else ''), end='')
         for item in item['board name']:
@@ -44,7 +44,7 @@ def render_oneline(arg_list=None, board="My board"):
     for item in arg_list:
         print("{0}. ".format(item['number']).rjust(6), end="")
         print("{0}  {1} ".format(icons['note'] if item['type'] == "note" else icons[item['status']],
-                                 item['description']), end='')
+                                 item['header']), end='')
         print("{0} {1}".format(
             icons[item['priority']], icons['star'] if item['starred'] else ''), end='')
         print()
