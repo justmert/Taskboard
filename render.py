@@ -13,6 +13,33 @@ icons = {"heart": "♥",
          "medium": "(!)",
          "high": "(!!)",
          }
+         
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+def render_detail(header, detail):
+    print("\n {0} {1}".format(icons['snippet'],header))
+    print("{0}".format(detail))
+
+def render_find(item, colourized_header,print_h = False):
+    if print_h:
+        print("\n {0} {1}".format(icons['heart'], "Found Items"))
+    print("{0} ".format(item['number']).rjust(6), end="")
+    print("{0} {1:<1} {2} ".format(icons[item['status']] if item['type'] == "task" else icons[item['type']],
+                                       icons['star'] if item['starred'] else '', colourized_header), end='')
+    print("{0}".format(icons[item['priority']]), end='')
+    for item in item['board name']:
+        if item != "My Board":
+            print(f"#{item} ", end='')
+    print()
+    
 
 
 def render_items(arg_l=None, board="My board", print_stats=True):

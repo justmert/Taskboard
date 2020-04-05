@@ -1,8 +1,9 @@
 import task
 from jsonparse import writejson_task
 from archive import writejson_archive
-from render import render_items, render_oneline
+from render import render_items, render_oneline, bcolors,render_detail,render_find
 import pyperclip
+import re
 import editor
 import os
 render_pref = {"success": None, "print": True, "print_b": True}
@@ -105,19 +106,52 @@ def copy_detail(nums):
     if render_pref['success']:
         pyperclip.copy(found[0]['detail'])
 
-# def find_detail():
-#     pass
+def find_detail(arg):
+    render_pref['success'] = False
+    if not arg or arg.isspace():
+        return
+    for item in task.items:
+        if item['type'] == "snippet" and arg in item['detail']:
+            render_pref['success'] = True
+            render_pref['print'] = False
+            indexes = [m.start() for m in re.finditer(arg, item['detail'])]
+            content = ""
+            start_inx = 0
+            last_inx = indexes[-1]
+            for index in indexes:
+                content = content + item['detail'][start_inx:index] + bcolors.OKBLUE + item['detail'][index:index+len(arg)] + \
+                    bcolors.ENDC 
+                start_inx = index + len(arg)
+            content = content + item['detail'][last_inx+len(arg):]
+            render_detail(item['header'],content)
 
-
+            
 def find(arg):
     render_pref['success'] = False
     if not arg or arg.isspace():
         return
-    found = [x for x in task.items if arg in x['header']]
-    render_pref['success'] = True if found else False
-    if render_pref['success']:
-        render_pref['print'] = False
-        render_items(found, "Found Items", False)
+    is_itfirst = True
+    for item in task.items:
+        if arg in item['header']:
+            render_pref['success'] = True
+            render_pref['print'] = False
+            indexes = [m.start() for m in re.finditer(arg, item['header'])]
+            content = ""
+            start_inx = 0
+            last_inx = indexes[-1]
+            for index in indexes:
+                content = content + item['header'][start_inx:index] + bcolors.OKBLUE + item['header'][index:index+len(arg)] + \
+                    bcolors.ENDC 
+                start_inx = index + len(arg)
+            content = content + item['header'][last_inx+len(arg):]
+            render_find(item,content,True) if is_itfirst else render_find(item,content)
+            is_itfirst = False
+
+    # found = [x for x in task.items if arg in x['header']]
+    # render_pref['success'] = True if found else False
+    # if render_pref['success']:
+        # render_pref['print'] = False
+        # render_items(found, "Found Items", False)
 
 
 def copy(nums):

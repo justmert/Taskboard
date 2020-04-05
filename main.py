@@ -58,8 +58,8 @@ def parse_input(inp):
     elif param in ["f", "find"]:
         op.find(arg)
 
-    # elif param in ["fd", "finddetail"]:
-    #     op.find_detail(arg)
+    elif param in ["fd", "finddetail"]:
+        op.find_detail(arg)
 
     elif param in ["x", "copy"]:
         op.copy(parse_nums(arg))
