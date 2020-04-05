@@ -14,7 +14,7 @@ icons = {"heart": "♥",
          }
 
 
-def render_items(arg_list=None, board="My board"):
+def render_items(arg_list=None, board="My board", print_stats = True):
     arg_list = arg_list if arg_list else task.items
     print("\n {0} {1}".format(icons['heart'], board))
     counts = {"in-progress": 0, "done": 0, "undone": 0, "note": 0}
@@ -35,7 +35,8 @@ def render_items(arg_list=None, board="My board"):
             if item != "My Board":
                 print(f"♥{item} ", end='')
         print()
-    print("\n {0}% of all tasks completed\n {1} done · {2} in-progress · {3} pending · {4} notes".
+    if print_stats:
+        print("\n {0}% of all tasks completed\n {1} done · {2} in-progress · {3} pending · {4} notes".
           format(percent, counts['done'], counts['in-progress'], counts['undone'], counts['note']))
 
 

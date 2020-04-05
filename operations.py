@@ -30,7 +30,7 @@ def add_item(arg, item_type, detail=None):
     prior = 1
     det = detail if detail else None
     boards.append("My Board")
-    status = "undone"
+    status = None if item_type == "note" else "undone"
     task.items.append(task.Task(note_type, num, header,
                                 detail, status, prior, boards).to_dict())
     writejson_task()
@@ -44,8 +44,7 @@ def delete(nums):
     indexes = [x for x, y in enumerate(task.items) if y['number'] in nums]
 
     for index in indexes:
-        task.items[index]["number"] = task.archive[-1]["number"] + \
-            1 if task.archive else 1
+        task.items[index]["number"] = task.archive[-1]["number"] + 1 if task.archive else 1
         task.archive.append(task.items[index])
 
     for index in reversed(indexes):
@@ -61,7 +60,7 @@ def find(arg):
     render_pref['success'] = True if found else False
     if render_pref['success']:
         render_pref['print'] = False
-        render_items(found, "Found Items")
+        render_items(found, "Found Items", False)
 
 
 def copy(nums):
@@ -94,8 +93,8 @@ def restore(nums):
 
 
 def archive():
-    render_items(task.archive, "Archive")
     render_pref['print'] = False
+    render_items(task.archive, "Archive", False)
 
 
 def check(nums):

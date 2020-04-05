@@ -40,6 +40,9 @@ def parse_input(inp):
     elif param in ["n", "note"]:
         op.add_item(arg, "note")
 
+    elif param in ["sn", "snippet"]:
+        op.add_item(arg, "note")
+
     elif param in ["d", "delete"]:
         op.delete(parse_nums(arg))
 
