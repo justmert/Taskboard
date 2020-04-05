@@ -6,7 +6,8 @@ from distutils.spawn import find_executable
 
 
 def default_editors():
-    return ('editor', 'vim', 'emacs','nano','code')
+    return ('editor', 'vim', 'emacs', 'nano', 'code')
+
 
 def editor_args(editor):
     if editor in ['vim', 'gvim', 'vim.basic', 'vim.tiny']:
@@ -26,6 +27,7 @@ def editor_args(editor):
 
     return []
 
+
 def get_editor():
     editor = os.environ.get('VISUAL') or os.environ.get('EDITOR')
     if editor:
@@ -36,10 +38,10 @@ def get_editor():
         if path is not None:
             return path
 
-    print("Unable to find an editor on this system.Please consider setting your $EDITOR variable")
+    print("Unable to find an editor on this system. Please consider setting your $EDITOR variable")
 
 
-def edit(filename=None, contents=None, suffix=''):
+def snippet_geteditor(filename=None, contents=None, suffix=''):
     editor = get_editor()
     args = [editor] + editor_args(os.path.basename(os.path.realpath(editor)))
 
@@ -47,21 +49,25 @@ def edit(filename=None, contents=None, suffix=''):
         tmp = tempfile.NamedTemporaryFile(suffix=suffix)
         filename = tmp.name
 
+    if contents is not None:
+        # For python3 only.  If str is passed instead of bytes, encode default
+        if hasattr(contents, 'encode'):
+            contents = contents.encode()
+
+        with open(filename, mode='wb') as f:
+            f.write(contents)
+
     args += [filename]
 
     proc = subprocess.Popen(args, close_fds=True, stdout=None)
     proc.communicate()
 
     with open(filename, mode='rb') as f:
-        return f.read()
+        return f.read().decode(locale.getpreferredencoding())
 
 
-def _get_editor(ns):
-    print(get_editor())
-
-
-def _edit(ns):
-    contents = ns.contents
-    if contents is not None:
-        contents = contents.encode(locale.getpreferredencoding())
-    print(edit(filename=ns.path, contents=contents))
+# def _edit(ns):
+#     contents = ns.contents
+#     if contents is not None:
+#         contents = contents.encode(locale.getpreferredencoding())
+#     print(snippet_geteditor(filename=ns.path, contents=contents))

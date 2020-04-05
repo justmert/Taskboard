@@ -12,5 +12,5 @@ def readjson_archive():
 
 
 def writejson_archive():
-    with open(paths["archive_path"], "w", encoding="utf-8") as f:
+    with open(paths["archive_path"], "w") as f:
         json.dump(task.archive, f, indent=4)

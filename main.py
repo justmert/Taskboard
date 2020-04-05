@@ -41,13 +41,25 @@ def parse_input(inp):
         op.add_item(arg, "note")
 
     elif param in ["sn", "snippet"]:
-        op.add_item(arg, "note")
+        op.add_item(arg, "snippet")
+
+    elif param in ["v", "view"]:
+        op.view(parse_nums(arg))
+
+    elif param in ["cd", "copydetail"]:
+        op.copy_detail(parse_nums(arg))
+
+    elif param in ["ed", "editdetail"]:
+        op.edit_detail(parse_nums(arg))
 
     elif param in ["d", "delete"]:
         op.delete(parse_nums(arg))
 
     elif param in ["f", "find"]:
         op.find(arg)
+
+    # elif param in ["fd", "finddetail"]:
+    #     op.find_detail(arg)
 
     elif param in ["x", "copy"]:
         op.copy(parse_nums(arg))

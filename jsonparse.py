@@ -12,5 +12,5 @@ def readjson_task():
 
 
 def writejson_task():
-    with open(paths["task_path"], "w", encoding="utf-8") as f:
+    with open(paths["task_path"], "w") as f:
         json.dump(task.items, f, indent=4)

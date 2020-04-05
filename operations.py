@@ -3,8 +3,9 @@ from jsonparse import writejson_task
 from archive import writejson_archive
 from render import render_items, render_oneline
 import pyperclip
+import editor
 import os
-render_pref = {"success": None, "print": True}
+render_pref = {"success": None, "print": True, "print_b": True}
 
 
 def parse_boards(arg):
@@ -20,19 +21,25 @@ def parse_boards(arg):
     return header, boards
 
 
-def add_item(arg, item_type, detail=None):
+def add_item(arg, item_type):
+    render_pref['success'] = False
     if not arg:
-        render_pref['success'] = False
         return
     header, boards = parse_boards(arg)
     num = task.items[-1]["number"]+1 if task.items else 1
     note_type = item_type
     prior = 1
-    det = detail if detail else None
+    det = editor.snippet_geteditor() if item_type == "snippet" else None
+    if det is not None and (det == "" or det.isspace()):
+        return
+
+    if det is not None:
+        det = det[0:-1]
+
     boards.append("My Board")
-    status = None if item_type == "note" else "undone"
+    status = "undone" if item_type == "task" else None
     task.items.append(task.Task(note_type, num, header,
-                                detail, status, prior, boards).to_dict())
+                                det, status, prior, boards).to_dict())
     writejson_task()
     render_pref['success'] = True
 
@@ -44,7 +51,8 @@ def delete(nums):
     indexes = [x for x, y in enumerate(task.items) if y['number'] in nums]
 
     for index in indexes:
-        task.items[index]["number"] = task.archive[-1]["number"] + 1 if task.archive else 1
+        task.items[index]["number"] = task.archive[-1]["number"] + \
+            1 if task.archive else 1
         task.archive.append(task.items[index])
 
     for index in reversed(indexes):
@@ -55,7 +63,56 @@ def delete(nums):
     writejson_archive() if render_pref['success'] else None
 
 
+def view(nums):
+    render_pref['success'] = False
+    if len(nums) != 1:
+        return
+
+    found = [x for x in task.items if x['number']
+             == nums[0] and x['type'] == "snippet"]
+    render_pref['success'] = True if found else False
+    if render_pref['success']:
+        render_pref['print'] = False
+        print("\n"+found[0]['detail'])
+
+
+def edit_detail(nums):
+    render_pref['success'] = False
+    if len(nums) != 1:
+        return
+
+    findex = -1
+    for index, item in enumerate(task.items):
+        if item['number'] == nums[0] and item['type'] == "snippet":
+            findex = index
+            break
+
+    render_pref['success'] = True if findex != -1 else False
+    if render_pref['success']:
+        task.items[findex]['detail'] = editor.snippet_geteditor(
+            contents=task.items[findex]['detail'])
+        writejson_task()
+
+
+def copy_detail(nums):
+    render_pref['success'] = False
+    if len(nums) != 1:
+        return
+
+    found = [x for x in task.items if x['number']
+             == nums[0] and x['type'] == "snippet"]
+    render_pref['success'] = True if found else False
+    if render_pref['success']:
+        pyperclip.copy(found[0]['detail'])
+
+# def find_detail():
+#     pass
+
+
 def find(arg):
+    render_pref['success'] = False
+    if not arg or arg.isspace():
+        return
     found = [x for x in task.items if arg in x['header']]
     render_pref['success'] = True if found else False
     if render_pref['success']:
@@ -75,8 +132,8 @@ def copy(nums):
 
 
 def restore(nums):
+    render_pref['success'] = False
     if not nums:
-        render_pref['success'] = False
         return
     indexes = [x for x, y in enumerate(task.archive) if y['number'] in nums]
 
@@ -207,8 +264,8 @@ def clear(path):
         os.remove(path)
     task.archive.clear()
     refactor(False)
+    writejson_archive()
     render_pref['success'] = True
-    pass
 
 
 def add_notebook(arg):
@@ -230,14 +287,16 @@ def move(arg):
     render_pref['success'] = False
     nums, book = arg.rsplit(" ", 1) if " " in arg else (arg, "")
     nums = [int(s) for s in nums.split() if s.isdigit()]
-    if not book or not nums:
+    if not nums:
         return
     for item in task.items:
-        if item['number'] in nums and item['type']:
+        if item['number'] in nums:  # there is some error. check later
             if book not in item['board name']:
                 item['board name'].clear()
                 item['board name'].append('My Board')
-                item['board name'].append(book)
+                bookst = book.strip()
+                if bookst:
+                    item['board name'].append(bookst)
                 render_pref['success'] = True
 
     writejson_task() if render_pref['success'] else None
