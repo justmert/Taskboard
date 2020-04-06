@@ -1,7 +1,7 @@
 import task
 from jsonparse import writejson_task
 from archive import writejson_archive
-from render import render_items, render_oneline, bcolors,render_detail,render_find
+from render import render_items, render_oneline, bcolors, render_detail, render_find, calculate_stats, pr_stats
 import pyperclip
 import re
 import editor
@@ -22,6 +22,22 @@ def parse_boards(arg):
     return header, boards
 
 
+def timeline():
+    render_pref['print'] = False
+    render_pref['success'] = True
+    timeline_dict = {}
+    for item in task.items:
+        if item['date'][0] not in timeline_dict:
+            timeline_dict[item['date'][0]] = [item]
+        else:
+            timeline_dict[item['date'][0]].append(item)
+    for key, value in timeline_dict.items():
+        render_items(value, key, print_stats=False, print_day=False)
+
+    c, s, p = calculate_stats()
+    pr_stats(c, s, p)
+
+
 def add_item(arg, item_type):
     render_pref['success'] = False
     if not arg:
@@ -37,7 +53,6 @@ def add_item(arg, item_type):
     if det is not None:
         det = det[0:-1]
 
-    boards.append("My Board")
     status = "undone" if item_type == "task" else None
     task.items.append(task.Task(note_type, num, header,
                                 det, status, prior, boards).to_dict())
@@ -106,6 +121,7 @@ def copy_detail(nums):
     if render_pref['success']:
         pyperclip.copy(found[0]['detail'])
 
+
 def find_detail(arg):
     render_pref['success'] = False
     if not arg or arg.isspace():
@@ -120,12 +136,12 @@ def find_detail(arg):
             last_inx = indexes[-1]
             for index in indexes:
                 content = content + item['detail'][start_inx:index] + bcolors.OKBLUE + item['detail'][index:index+len(arg)] + \
-                    bcolors.ENDC 
+                    bcolors.ENDC
                 start_inx = index + len(arg)
             content = content + item['detail'][last_inx+len(arg):]
-            render_detail(item['header'],content)
+            render_detail(item['header'], content)
 
-            
+
 def find(arg):
     render_pref['success'] = False
     if not arg or arg.isspace():
@@ -141,17 +157,12 @@ def find(arg):
             last_inx = indexes[-1]
             for index in indexes:
                 content = content + item['header'][start_inx:index] + bcolors.OKBLUE + item['header'][index:index+len(arg)] + \
-                    bcolors.ENDC 
+                    bcolors.ENDC
                 start_inx = index + len(arg)
             content = content + item['header'][last_inx+len(arg):]
-            render_find(item,content,True) if is_itfirst else render_find(item,content)
+            render_find(item, content, True) if is_itfirst else render_find(
+                item, content)
             is_itfirst = False
-
-    # found = [x for x in task.items if arg in x['header']]
-    # render_pref['success'] = True if found else False
-    # if render_pref['success']:
-        # render_pref['print'] = False
-        # render_items(found, "Found Items", False)
 
 
 def copy(nums):
@@ -246,7 +257,10 @@ def list_all():
     render_pref['print'] = False
     render_pref['success'] = True
     for key, value in board_dict.items():
-        render_items(value, key)
+        render_items(value, key, print_stats=False, print_boards=False)
+
+    c, s, p = calculate_stats()
+    pr_stats(c, s, p)
 
 
 def edit(arg):
@@ -327,10 +341,8 @@ def move(arg):
         if item['number'] in nums:  # there is some error. check later
             if book not in item['board name']:
                 item['board name'].clear()
-                item['board name'].append('My Board')
                 bookst = book.strip()
                 if bookst:
                     item['board name'].append(bookst)
                 render_pref['success'] = True
-
     writejson_task() if render_pref['success'] else None

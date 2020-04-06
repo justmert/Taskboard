@@ -13,4 +13,4 @@ def readjson_archive():
 
 def writejson_archive():
     with open(paths["archive_path"], "w") as f:
-        json.dump(task.archive, f, indent=4)
+        json.dump(task.archive, f, indent=4, default=str)

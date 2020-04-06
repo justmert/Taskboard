@@ -1,8 +1,12 @@
 from enum import Enum
-import datetime
-
+from datetime import datetime
+from time import localtime, strftime
 items = []
 archive = []
+
+
+def getdatetime():
+    return strftime("%a %b %d %Y", localtime())
 
 
 class Task:
@@ -17,7 +21,7 @@ class Task:
         self.priority = priority
         self.where = where
         self.is_starred = is_starred
-        self.time = str(datetime.datetime.now())
+        self.time = [getdatetime(), 0]
 
     def to_dict(self):
         return {"type": self.type,
@@ -28,4 +32,4 @@ class Task:
                 "priority":  Task.prip_dict[self.priority],
                 "board name": self.where,
                 "starred": self.is_starred,
-                "create time": self.time}
+                "date": self.time}

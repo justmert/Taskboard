@@ -58,6 +58,9 @@ def parse_input(inp):
     elif param in ["f", "find"]:
         op.find(arg)
 
+    elif param in ["tl", "timeline"]:
+        op.timeline()
+
     elif param in ["fd", "finddetail"]:
         op.find_detail(arg)
 
