@@ -2,11 +2,14 @@ import argparse
 import preferences as pr
 import os
 from pathlib import Path
+from help import help,examples
 import operations as op
 from render import icons, render_items
 from jsonparse import readjson_task
 from archive import readjson_archive
+from operations import render_pref
 from render import colors
+
 
 def check_paths():
     pr.paths['project_dir'] = pr.prefs['taskitDirectory'] + "/.taskit"
@@ -43,14 +46,14 @@ def parse_input(inp):
     elif param in ["sn", "snippet"]:
         op.add_item(arg, "snippet")
 
-    elif param in ["v", "view"]:
-        op.view(parse_nums(arg))
+    elif param in ["b", "begin"]:
+        op.begin(parse_nums(arg))
 
-    elif param in ["cd", "copydetail"]:
-        op.copy_detail(parse_nums(arg))
+    elif param in ["c", "check"]:
+        op.check(parse_nums(arg))
 
-    elif param in ["ed", "editdetail"]:
-        op.edit_detail(parse_nums(arg))
+    elif param in ["e", "edit"]:
+        op.edit(arg)
 
     elif param in ["d", "delete"]:
         op.delete(parse_nums(arg))
@@ -58,17 +61,20 @@ def parse_input(inp):
     elif param in ["f", "find"]:
         op.find(arg)
 
-    elif param in ["tl", "timeline"]:
-        op.timeline()
-
-    elif param in ["fd", "finddetail"]:
-        op.find_detail(arg)
-
-    elif param in ["x", "copy"]:
-        op.copy(parse_nums(arg))
-
     elif param in ["s", "star"]:
         op.star(parse_nums(arg))
+
+    elif param in ["p", "priority"]:
+        op.priority(arg)
+
+    elif param in ["m", "move"]:
+        op.move(arg)
+
+    elif param in ["l", "list"]:
+        op.list_all()
+
+    elif param in ["y", "copy"]:
+        op.copy(parse_nums(arg))
 
     elif param in ["a", "archive"]:
         op.archive()
@@ -76,35 +82,40 @@ def parse_input(inp):
     elif param in ["r", "restore"]:
         op.restore(parse_nums(arg))
 
+    elif param in ["o", "oneline"]:
+        op.oneline()
+
+    elif param in ["v", "view"]:
+        op.view(parse_nums(arg))
+
+    elif param in ["at", "attach"]:
+        op.add_notebook(arg)
+
+    elif param in ["cc", "copycon"]:
+        op.copy_detail(parse_nums(arg))
+
+    elif param in ["ec", "editcon"]:
+        op.edit_detail(parse_nums(arg))
+
+    elif param in ["fc", "findcon"]:
+        op.find_detail(arg)
+
     elif param in ["rf", "refactor"]:
         op.refactor()
-
-    elif param in ["l", "list"]:
-        op.list_all()
 
     elif param in ["cl", "clear"]:
         op.clear(pr.paths['archive_path'])
 
-    elif param in ["m", "move"]:
-        op.move(arg)
+    elif param in ["tl", "timeline"]:
+        op.timeline()
 
-    elif param in ["c", "check"]:
-        op.check(parse_nums(arg))
+    elif param in ["h", "help"]:
+        render_pref['print'] = False
+        print(help)
 
-    elif param in ["b", "begin"]:
-        op.begin(parse_nums(arg))
-
-    elif param in ["an", "addn"]:
-        op.add_notebook(arg)
-
-    elif param in ["e", "edit"]:
-        op.edit(arg)
-
-    elif param in ["o", "oneline"]:
-        op.oneline()
-
-    elif param in ["p", "priority"]:
-        op.priority(arg)
+    elif param in ["ex", "examples"]:
+        render_pref['print'] = False
+        print(examples)
 
     elif param == "exit":
         exit()
@@ -123,7 +134,7 @@ def main():
             render_items()
 
         inp = input("\n {}{}TaskIt{}{} {} ".format(
-            colors.BLUE2,colors.BOLD,colors.END,
+            colors.BLUE2, colors.BOLD, colors.END,
             decide(), icons['diamond'])).strip()
         if inp:
             parse_input(inp)

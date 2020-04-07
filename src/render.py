@@ -27,7 +27,7 @@ icons = {"heart": colors.RED2 + "♥" + colors.END,
          "note": colors.BLUE + "●" + colors.END,
          "snippet": colors.YELLOW + "◆" + colors.END,
          "undone": colors.VIOLET + "☐" + colors.END,
-         "in-progress": colors.BEIGE + "⋯"+colors.END,
+         "in-progress": colors.BEIGE2 + "⋯"+colors.END,
          "star": colors.YELLOW2 + "★" + colors.END,
          "done": colors.GREEN+"✔"+colors.END,
          "fail": colors.RED + "✘" + colors.END,
@@ -85,7 +85,7 @@ def calculate_stats(arg_list=None):
 
 def pr_stats(counts, sum, percent):
     print(f"\n{colors.GREY} {percent}% of all tasks completed\n {colors.GREEN}{colors.BOLD}{counts['done']}{colors.END}{colors.GREY} done {icons['bullet']} " +
-          f"{colors.BEIGE}{colors.BOLD}{counts['in-progress']}{colors.END}{colors.GREY} in progress {icons['bullet']} {colors.VIOLET}{colors.BOLD}{counts['undone']}{colors.END} {colors.GREY}" +
+          f"{colors.BEIGE2}{colors.BOLD}{counts['in-progress']}{colors.END}{colors.GREY} in progress {icons['bullet']} {colors.VIOLET}{colors.BOLD}{counts['undone']}{colors.END} {colors.GREY}" +
           f"pending {icons['bullet']} {colors.BLUE}{colors.BOLD}{counts['note']}{colors.END} {colors.GREY}notes {icons['bullet']} {colors.YELLOW}{colors.BOLD}{counts['snippet']}{colors.END} {colors.GREY} snippets {colors.END}")
 
 
