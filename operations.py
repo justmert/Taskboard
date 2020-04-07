@@ -1,7 +1,7 @@
 import task
 from jsonparse import writejson_task
 from archive import writejson_archive
-from render import render_items, render_oneline, bcolors, render_detail, render_find, calculate_stats, pr_stats
+from render import render_items, render_oneline, colors, render_detail, render_find, calculate_stats, pr_stats
 import pyperclip
 import re
 import editor
@@ -135,8 +135,8 @@ def find_detail(arg):
             start_inx = 0
             last_inx = indexes[-1]
             for index in indexes:
-                content = content + item['detail'][start_inx:index] + bcolors.OKBLUE + item['detail'][index:index+len(arg)] + \
-                    bcolors.ENDC
+                content = content + item['detail'][start_inx:index] + colors.BLUE + item['detail'][index:index+len(arg)] + \
+                    colors.END
                 start_inx = index + len(arg)
             content = content + item['detail'][last_inx+len(arg):]
             render_detail(item['header'], content)
@@ -156,8 +156,8 @@ def find(arg):
             start_inx = 0
             last_inx = indexes[-1]
             for index in indexes:
-                content = content + item['header'][start_inx:index] + bcolors.OKBLUE + item['header'][index:index+len(arg)] + \
-                    bcolors.ENDC
+                content = content + item['header'][start_inx:index] + colors.BLUE + item['header'][index:index+len(arg)] + \
+                    colors.END
                 start_inx = index + len(arg)
             content = content + item['header'][last_inx+len(arg):]
             render_find(item, content, True) if is_itfirst else render_find(
@@ -246,8 +246,11 @@ def star(nums):
 
 
 def list_all():
-    board_dict = {}
+    board_dict = {"My Board":[]}
     for item in task.items:
+        if not item['board name']:
+            board_dict['My Board'].append(item)
+            
         for b in item['board name']:
             if b not in board_dict:
                 board_dict[b] = [item]

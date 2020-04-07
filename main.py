@@ -6,7 +6,7 @@ import operations as op
 from render import icons, render_items
 from jsonparse import readjson_task
 from archive import readjson_archive
-
+from render import colors
 
 def check_paths():
     pr.paths['project_dir'] = pr.prefs['taskitDirectory'] + "/.taskit"
@@ -122,7 +122,8 @@ def main():
         else:
             render_items()
 
-        inp = input("\nTaskIt{} {} ".format(
+        inp = input("\n {}{}TaskIt{}{} {} ".format(
+            colors.BLUE2,colors.BOLD,colors.END,
             decide(), icons['diamond'])).strip()
         if inp:
             parse_input(inp)
