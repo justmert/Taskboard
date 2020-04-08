@@ -1,6 +1,6 @@
 from render import colors
-help = \
-f"""
+help_message = \
+    f"""
    Tasks, boards, notes and snippets for the command-line environment
 
    {colors.BOLD}Usage{colors.END}  
@@ -34,7 +34,7 @@ f"""
       exit             •    Just exit """
 
 examples = \
-f"""
+    f"""
     It is easy actually, it follows like:
     {colors.BLUE}｢command name｣{colors.END} {colors.YELLOW}｢numbers if it needs｣{colors.END}{colors.GREEN2} ｢arguments as request or option｣{colors.END}
 

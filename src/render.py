@@ -1,6 +1,5 @@
 import task
 
-
 class colors:
     END = '\33[0m'
     BOLD = '\33[1m'

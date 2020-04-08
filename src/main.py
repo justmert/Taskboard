@@ -1,14 +1,9 @@
-import argparse
-import preferences as pr
 import os
-from pathlib import Path
-from help import help,examples
+import preferences as pr
+from render import icons, render_items, colors
+from jsonparse import read_json_archive, read_json_items
 import operations as op
-from render import icons, render_items
-from jsonparse import readjson_task
-from archive import readjson_archive
-from operations import render_pref
-from render import colors
+from help import help_message, examples
 
 
 def check_paths():
@@ -23,19 +18,22 @@ def parse_nums(arg):
     return [int(s) for s in arg.split() if s.isdigit()]
 
 
-def decide():
+def feedback():
     ret = ''
-    if op.render_pref['success']:
+    if op.render_prefs['success']:
         ret = ' ' + icons['done']
-    elif op.render_pref['success'] == False:
+
+    elif op.render_prefs['success'] == False:
         ret = ' ' + icons['fail']
 
-    op.render_pref['success'] = None
+    op.render_prefs['success'] = None
     return ret
 
 
 def parse_input(inp):
     param, arg = inp.split(" ", 1) if " " in inp else (inp, "")
+    arg = arg.strip()
+    op.render_prefs['success'] = False
 
     if param in ["t", "task"]:
         op.add_item(arg, "task")
@@ -47,22 +45,26 @@ def parse_input(inp):
         op.add_item(arg, "snippet")
 
     elif param in ["b", "begin"]:
-        op.begin(parse_nums(arg))
+        x = parse_nums(arg)
+        op.begin(x) if x else None  
 
     elif param in ["c", "check"]:
-        op.check(parse_nums(arg))
+        x = parse_nums(arg)
+        op.check(x) if x else None
 
     elif param in ["e", "edit"]:
         op.edit(arg)
 
     elif param in ["d", "delete"]:
-        op.delete(parse_nums(arg))
+        x = parse_nums(arg)
+        op.delete(x) if x else None
 
     elif param in ["f", "find"]:
-        op.find(arg)
+        op.find(arg) if arg else None 
 
     elif param in ["s", "star"]:
-        op.star(parse_nums(arg))
+        x = parse_nums(arg)
+        op.star(x) if x else None
 
     elif param in ["p", "priority"]:
         op.priority(arg)
@@ -71,7 +73,7 @@ def parse_input(inp):
         op.move(arg)
 
     elif param in ["l", "list"]:
-        op.list_all()
+        op.list_boards()
 
     elif param in ["y", "copy"]:
         op.copy(parse_nums(arg))
@@ -80,7 +82,8 @@ def parse_input(inp):
         op.archive()
 
     elif param in ["r", "restore"]:
-        op.restore(parse_nums(arg))
+        x = parse_nums(arg)
+        op.restore(x) if x else None
 
     elif param in ["o", "oneline"]:
         op.oneline()
@@ -89,16 +92,16 @@ def parse_input(inp):
         op.view(parse_nums(arg))
 
     elif param in ["at", "attach"]:
-        op.add_notebook(arg)
+        op.attach_to_board(arg)
 
     elif param in ["cc", "copycon"]:
-        op.copy_detail(parse_nums(arg))
+        op.copy_content(parse_nums(arg))
 
     elif param in ["ec", "editcon"]:
-        op.edit_detail(parse_nums(arg))
+        op.edit_content(parse_nums(arg))
 
     elif param in ["fc", "findcon"]:
-        op.find_detail(arg)
+        op.find_content(arg) if arg else None 
 
     elif param in ["rf", "refactor"]:
         op.refactor()
@@ -110,32 +113,36 @@ def parse_input(inp):
         op.timeline()
 
     elif param in ["h", "help"]:
-        render_pref['print'] = False
-        print(help)
+        op.render_prefs['print'] = False
+        print(help_message)
 
     elif param in ["ex", "examples"]:
-        render_pref['print'] = False
+        op.render_prefs['print'] = False
         print(examples)
 
     elif param == "exit":
         exit()
 
+    else:
+        op.render_prefs['success'] = None
+
+
 
 def main():
     pr.check_prefs()
     check_paths()
-    readjson_task()
-    readjson_archive()
+    read_json_archive()
+    read_json_items()
 
     while True:
-        if not op.render_pref['print']:
-            op.render_pref['print'] = True
+        if not op.render_prefs['print']:
+            op.render_prefs['print'] = True
         else:
             render_items()
 
         inp = input("\n {}{}TaskIt{}{} {} ".format(
             colors.BLUE2, colors.BOLD, colors.END,
-            decide(), icons['diamond'])).strip()
+            feedback(), icons['diamond'])).strip()
         if inp:
             parse_input(inp)
 

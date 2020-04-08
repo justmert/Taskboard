@@ -37,11 +37,10 @@ def get_editor():
         path = find_executable(editor)
         if path is not None:
             return path
-
     print("Unable to find an editor on this system. Please consider setting your $EDITOR variable")
 
 
-def snippet_geteditor(filename=None, contents=None, suffix=''):
+def open_editor(filename=None, contents=None, suffix=''):
     editor = get_editor()
     args = [editor] + editor_args(os.path.basename(os.path.realpath(editor)))
 
@@ -50,7 +49,6 @@ def snippet_geteditor(filename=None, contents=None, suffix=''):
         filename = tmp.name
 
     if contents is not None:
-        # For python3 only.  If str is passed instead of bytes, encode default
         if hasattr(contents, 'encode'):
             contents = contents.encode()
 
@@ -64,10 +62,3 @@ def snippet_geteditor(filename=None, contents=None, suffix=''):
 
     with open(filename, mode='rb') as f:
         return f.read().decode(locale.getpreferredencoding())
-
-
-# def _edit(ns):
-#     contents = ns.contents
-#     if contents is not None:
-#         contents = contents.encode(locale.getpreferredencoding())
-#     print(snippet_geteditor(filename=ns.path, contents=contents))
