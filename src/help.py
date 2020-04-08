@@ -20,7 +20,6 @@ help_message = \
       y  - copy        •    Copy an item description
       a  - archive     •    Display archived items
       r  - restore     •    Restore item from archive
-      o  - oneline     •    Display items in one line
       v  - view        •    View code snippet's content
       at - attach      •    Attach an item to a notebook
       cc - copycon     •    Copy code snippet's content
@@ -57,4 +56,4 @@ examples = \
       • {colors.BLUE}copycon{colors.END} {colors.YELLOW}5{colors.END}
       • {colors.BLUE}editcon{colors.END} {colors.YELLOW}3{colors.END}
       • {colors.BLUE}findcon{colors.END} {colors.YELLOW}10{colors.END} print
-      Other commands doesn't need arguments so you can try easily"""
+      Other commands don't need arguments so you can try them out easily"""

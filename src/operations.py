@@ -12,8 +12,8 @@ render_prefs = {"success": None, "print": True, "print_b": True}
 def _get_newid_board(): return task.items[-1]["number"]+1 if task.items else 1
 
 
-def _get_newid_archive(
-): return task.items[-1]["number"]+1 if task.items else 1
+def _get_newid_archive():
+    return task.archive[-1]["number"]+1 if task.archive else 1
 
 
 def _parse_boards(arg):
@@ -31,18 +31,17 @@ def _parse_boards(arg):
 
 def timeline():
     render_prefs['print'] = False
-    render_prefs['success'] = True
+    render_prefs['success'] = None
     timeline_dict = {}
     for item in task.items:
         if item['date'][0] not in timeline_dict:
             timeline_dict[item['date'][0]] = [item]
         else:
             timeline_dict[item['date'][0]].append(item)
-    for key, value in timeline_dict.items():
-        rn.render_items(value, key, print_stats=False, print_day=False)
 
-    c, s, p = rn.calculate_stats()
-    rn.pr_stats(c, s, p)
+    for key, value in timeline_dict.items():
+        rn.render_items(value, board=key, rn_stats_all=False, rn_day=False)
+    rn.render_statictic()
 
 
 def add_item(arg, item_type):
@@ -52,7 +51,7 @@ def add_item(arg, item_type):
     header, boards = _parse_boards(arg)
     num = _get_newid_board()
     typee = item_type
-    prior = 1
+    prior = "*1"
     det = editor.open_editor() if item_type == "snippet" else None
     if det is not None:
         det = det.strip()
@@ -109,7 +108,7 @@ def edit_content(nums):
     if findex != -1:
         render_prefs['success'] = True
         task.items[findex]['detail'] = editor.open_editor(
-            contents=task.items[findex]['detail'])
+            contents=task.items[findex]['detail']).strip()
         write_json_items()
 
 
@@ -136,13 +135,13 @@ def find_content(arg):
                     item['detail'][index:index+len(arg)] + rn.colors.END
                 start_inx = index + len(arg)
             content = content + item['detail'][last_inx+len(arg):]
-            rn.render_detail(item['header'], content)
+            rn.render_content(item['header'], content)
             render_prefs['success'] = True
             render_prefs['print'] = False
 
 
 def find(arg):
-    first_entrence = True
+    found = []
     for item in task.items:
         if arg in item['header']:
             indexes = [m.start() for m in re.finditer(arg, item['header'])]
@@ -154,11 +153,13 @@ def find(arg):
                     item['header'][index:index+len(arg)] + rn.colors.END
                 start_inx = index + len(arg)
             content = content + item['header'][last_inx+len(arg):]
-            rn.render_find(item, content, True) if first_entrence else rn.render_find(
-                item, content)
-            first_entrence = False
-            render_prefs['success'] = True
-            render_prefs['print'] = False
+            found.append((item, content))
+    if found:
+        render_prefs['success'] = True
+        render_prefs['print'] = False
+        rn.render_board_header("Found Items")
+        for elem in found:
+            rn.render_one_item(elem[0], elem[1])
 
 
 def copy(nums):
@@ -188,7 +189,8 @@ def restore(nums):
 def archive():
     render_prefs['print'] = False
     render_prefs['success'] = None
-    rn.render_items(task.archive, "Archive", False)
+    rn.render_items(task.archive, "Archive", makebar=False,
+                    rn_stats=False, rn_stats_all=False)
 
 
 def check(nums):
@@ -241,11 +243,11 @@ def list_boards():
 
     render_prefs['print'] = False
     render_prefs['success'] = None
-    for key, value in board_dict.items():
-        rn.render_items(value, key, print_stats=False, print_boards=False)
 
-    c, s, p = rn.calculate_stats()
-    rn.pr_stats(c, s, p)
+    for key, value in board_dict.items():
+        rn.render_items(value, board=key, rn_stats_all=False, rn_boards=False)
+
+    rn.render_statictic()
 
 
 def edit(arg):
@@ -261,12 +263,6 @@ def edit(arg):
             break
 
     write_json_items() if render_prefs['success'] else None
-
-
-def oneline():
-    render_prefs['print'] = False
-    render_prefs['print'] = None
-    rn.render_oneline()
 
 
 def begin(nums):

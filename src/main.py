@@ -46,7 +46,7 @@ def parse_input(inp):
 
     elif param in ["b", "begin"]:
         x = parse_nums(arg)
-        op.begin(x) if x else None  
+        op.begin(x) if x else None
 
     elif param in ["c", "check"]:
         x = parse_nums(arg)
@@ -60,7 +60,7 @@ def parse_input(inp):
         op.delete(x) if x else None
 
     elif param in ["f", "find"]:
-        op.find(arg) if arg else None 
+        op.find(arg) if arg else None
 
     elif param in ["s", "star"]:
         x = parse_nums(arg)
@@ -85,9 +85,6 @@ def parse_input(inp):
         x = parse_nums(arg)
         op.restore(x) if x else None
 
-    elif param in ["o", "oneline"]:
-        op.oneline()
-
     elif param in ["v", "view"]:
         op.view(parse_nums(arg))
 
@@ -101,7 +98,7 @@ def parse_input(inp):
         op.edit_content(parse_nums(arg))
 
     elif param in ["fc", "findcon"]:
-        op.find_content(arg) if arg else None 
+        op.find_content(arg) if arg else None
 
     elif param in ["rf", "refactor"]:
         op.refactor()
@@ -125,7 +122,6 @@ def parse_input(inp):
 
     else:
         op.render_prefs['success'] = None
-
 
 
 def main():
