@@ -1,10 +1,16 @@
 from distutils.core import setup
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name='Taskboard',    
     packages=['Taskboard'],
     version='0.1',      
     license='MIT',
     description=' Tasks, boards, notes & code snippets for the command-line environment',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author='Mert Köklü',
     author_email='kklumert@gmail.com',
     url='https://github.com/Marceliny/Taskboard',
@@ -14,6 +20,9 @@ setup(
     install_requires=[
         "pyperclip",
     ],
+    entry_points = {
+        'console_scripts': ['taskboard=Taskbook.__main__:main'],
+    },
     python_requires='>=3',
     classifiers=[
         "Development Status :: 5 - Production/Stable",
