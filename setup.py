@@ -17,7 +17,8 @@ setup(
         "pyperclip",
     ],
     entry_points = {
-        'console_scripts': ['taskboard=Taskboard.__main__:main'],
+        'console_scripts': ['taskboard=Taskboard.__main__:main',
+                            'tb=Taskboard.__main__:main'],
     },
     python_requires='>=3',
     classifiers=[
