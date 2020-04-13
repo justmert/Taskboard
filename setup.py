@@ -1,27 +1,23 @@
 from distutils.core import setup
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
-
 setup(
     name='Taskboard',    
     packages=['Taskboard'],
-    version='0.1',      
+    version='1.0',      
     license='MIT',
-    description=' Tasks, boards, notes & code snippets for the command-line environment',
-    long_description=long_description,
-    long_description_content_type="text/markdown",
+    description='Tasks, boards, notes & code snippets for the command-line environment',
+    long_description="Tasks, boards, notes & code snippets for the command-line environment",
     author='Mert Köklü',
     author_email='kklumert@gmail.com',
     url='https://github.com/Marceliny/Taskboard',
-    download_url='https://github.com/Marceliny/Taskboard/archive/v_01.tar.gz',
-    keywords=['task', 'board', 'notes', 'taskbook', 'snippet',
+    download_url='https://github.com/Marceliny/Taskboard/archive/v1.0.tar.gz',
+    keywords=['task', 'board', 'notes', 'snippet',
               'command-line'],
     install_requires=[
         "pyperclip",
     ],
     entry_points = {
-        'console_scripts': ['taskboard=Taskbook.__main__:main'],
+        'console_scripts': ['taskboard=Taskboard.__main__:main'],
     },
     python_requires='>=3',
     classifiers=[

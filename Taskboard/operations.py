@@ -1,10 +1,10 @@
 import os
 import re
 import pyperclip
-import task
-import editor
-import render as rn
-from jsonparse import write_json_archive, write_json_items
+import Taskboard.task as task
+import Taskboard.editor as editor
+import Taskboard.render as rn
+from Taskboard.jsonparse import write_json_archive, write_json_items
 
 render_prefs = {"success": None, "print": True, "print_b": True}
 switch_param = None

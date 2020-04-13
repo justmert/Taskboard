@@ -1,11 +1,11 @@
 import os
 import sys
-import preferences as pr
-import task
-from render import icons, render_items, colors
-from jsonparse import read_json_archive, read_json_items
-import operations as op
-from help import help_message, examples
+import Taskboard.preferences as pr
+import Taskboard.task as task
+from Taskboard.render import icons, render_items, colors
+from Taskboard.jsonparse import read_json_archive, read_json_items
+import Taskboard.operations as op
+from Taskboard.help import help_message, examples
 
 
 def check_paths():
@@ -133,13 +133,14 @@ def parse_input(param, arg):
         op.render_prefs['success'] = None
 
 
-def main(arg):
+def main():
     pr.check_prefs()
     check_paths()
     read_json_archive()
     read_json_items()
 
-    op.switch_param = arg[1].strip() if len(arg) > 1 else None
+    if len(sys.argv)>1:
+        op.switch_param = ' '.join(sys.argv[1:]).strip()
 
     while True:
         if not op.render_prefs['print']:
@@ -165,4 +166,4 @@ def main(arg):
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main()

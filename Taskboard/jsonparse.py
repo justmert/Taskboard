@@ -1,8 +1,8 @@
 import json
-import task
-from datetime import datetime
-from preferences import paths
 import os.path
+from datetime import datetime
+from Taskboard.preferences import paths
+import Taskboard.task as task
 
 
 def read_json_archive():

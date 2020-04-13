@@ -1,4 +1,5 @@
-from render import colors
+from Taskboard.render import colors
+
 help_message = \
     f"""
    Tasks, boards, notes and snippets for the command-line environment
