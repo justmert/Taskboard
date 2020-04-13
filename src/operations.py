@@ -7,6 +7,8 @@ import render as rn
 from jsonparse import write_json_archive, write_json_items
 
 render_prefs = {"success": None, "print": True, "print_b": True}
+switch_param = None
+
 
 
 def _get_newid_board(): return task.items[-1]["number"]+1 if task.items else 1
@@ -22,7 +24,9 @@ def _parse_boards(arg):
     indexes = []
     for index, item in enumerate(args):
         if "@" in item and item[0] == "@" and len(item) != 1 and item[1] != "@":
-            boards.append(''.join(item[1:]))
+            bname = ''.join(item[1:])
+            if bname not in boards:
+                boards.append(bname)
             indexes.append(index)
     args = [y for x, y in enumerate(args) if x not in indexes]
     header = ' '.join(args)
@@ -49,6 +53,8 @@ def add_item(arg, item_type):
         return
 
     header, boards = _parse_boards(arg)
+    if switch_param and switch_param not in boards:
+        boards.append(switch_param)
     num = _get_newid_board()
     typee = item_type
     prior = "*1"
@@ -328,3 +334,16 @@ def move(arg):
                     item['board name'].append(bookst)
                 render_prefs['success'] = True
     write_json_items() if render_prefs['success'] else None
+
+
+
+def switch_initilize():
+    return [x for x in task.items if switch_param in x['board name']]
+
+def switch(sw_par):
+    global switch_param
+    sw = sw_par.strip()
+    if sw == "":
+        switch_param = None
+    else:
+        switch_param = sw

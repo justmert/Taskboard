@@ -1,8 +1,10 @@
 from enum import Enum
 from datetime import datetime
 from time import localtime, strftime
+
 items = []
 archive = []
+# sw_items = []
 
 
 def _get_datetime():

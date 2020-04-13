@@ -1,5 +1,7 @@
 import os
+import sys
 import preferences as pr
+import task
 from render import icons, render_items, colors
 from jsonparse import read_json_archive, read_json_items
 import operations as op
@@ -30,9 +32,14 @@ def feedback():
     return ret
 
 
-def parse_input(inp):
+def split_input(inp):
     param, arg = inp.split(" ", 1) if " " in inp else (inp, "")
     arg = arg.strip()
+    return param, arg
+
+
+def parse_input(param, arg):
+
     op.render_prefs['success'] = False
 
     if param in ["t", "task"]:
@@ -111,10 +118,12 @@ def parse_input(inp):
 
     elif param in ["h", "help"]:
         op.render_prefs['print'] = False
+        op.render_prefs['success'] = None
         print(help_message)
 
     elif param in ["ex", "examples"]:
         op.render_prefs['print'] = False
+        op.render_prefs['success'] = None
         print(examples)
 
     elif param == "exit":
@@ -124,24 +133,36 @@ def parse_input(inp):
         op.render_prefs['success'] = None
 
 
-def main():
+def main(arg):
     pr.check_prefs()
     check_paths()
     read_json_archive()
     read_json_items()
 
+    op.switch_param = arg[1].strip() if len(arg) > 1 else None
+
     while True:
         if not op.render_prefs['print']:
             op.render_prefs['print'] = True
+
+        elif op.switch_param:
+            render_items(op.switch_initilize(),
+                         rn_boards=False, board=op.switch_param)
         else:
             render_items()
 
         inp = input("\n {}{}TaskIt{}{} {} ".format(
             colors.BLUE2, colors.BOLD, colors.END,
             feedback(), icons['diamond'])).strip()
-        if inp:
-            parse_input(inp)
+
+        param, arg = split_input(inp)
+
+        if param in ["sw", "switch"]:
+            op.switch(arg)
+
+        elif inp:
+            parse_input(param, arg)
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv)
