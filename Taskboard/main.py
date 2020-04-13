@@ -9,7 +9,7 @@ from help import help_message, examples
 
 
 def check_paths():
-    pr.paths['project_dir'] = pr.prefs['taskitDirectory'] + "/.taskit"
+    pr.paths['project_dir'] = pr.prefs['taskboardDirectory'] + "/.taskboard"
     if not os.path.exists(pr.paths['project_dir']):
         os.mkdir(pr.paths['project_dir'])
     pr.paths['task_path'] = pr.paths['project_dir'] + "/tasks.json"
@@ -151,7 +151,7 @@ def main(arg):
         else:
             render_items()
 
-        inp = input("\n {}{}TaskIt{}{} {} ".format(
+        inp = input("\n {}{}Taskboard{}{} {} ".format(
             colors.BLUE2, colors.BOLD, colors.END,
             feedback(), icons['diamond'])).strip()
 

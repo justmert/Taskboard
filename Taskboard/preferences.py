@@ -9,7 +9,7 @@ paths = {}
 
 def check_prefs():
     paths['home'] = str(Path.home())
-    paths['config'] = paths['home'] + "/.taskit.conf"
+    paths['config'] = paths['home'] + "/.taskboard.conf"
     if os.path.exists(paths['config']):
         read_prefs()
     else:
@@ -19,7 +19,7 @@ def check_prefs():
 
 
 def set_prefs():
-    prefs["taskitDirectory"] = paths['home']
+    prefs["taskboardDirectory"] = paths['home']
 
 
 def read_prefs():
