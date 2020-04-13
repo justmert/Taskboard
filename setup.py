@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='Taskboard',    
     packages=['Taskboard'],
-    version='1.0',      
+    version='1.0.0',      
     license='MIT',
     description='Tasks, boards, notes & code snippets for the command-line environment',
     long_description="Tasks, boards, notes & code snippets for the command-line environment",

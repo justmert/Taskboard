@@ -5,6 +5,7 @@ from time import localtime, strftime
 items = []
 archive = []
 
+
 def _get_datetime():
     return strftime("%a %b %d %Y", localtime())
 

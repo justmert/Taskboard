@@ -1,4 +1,5 @@
-import Taskboard.task as task 
+import Taskboard.task as task
+
 
 class colors:
     END = '\33[0m'
