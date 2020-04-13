@@ -10,7 +10,6 @@ render_prefs = {"success": None, "print": True, "print_b": True}
 switch_param = None
 
 
-
 def _get_newid_board(): return task.items[-1]["number"]+1 if task.items else 1
 
 
@@ -336,9 +335,9 @@ def move(arg):
     write_json_items() if render_prefs['success'] else None
 
 
-
 def switch_initilize():
     return [x for x in task.items if switch_param in x['board name']]
+
 
 def switch(sw_par):
     global switch_param

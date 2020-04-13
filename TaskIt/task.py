@@ -4,8 +4,6 @@ from time import localtime, strftime
 
 items = []
 archive = []
-# sw_items = []
-
 
 def _get_datetime():
     return strftime("%a %b %d %Y", localtime())
