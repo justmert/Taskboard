@@ -7,7 +7,7 @@
 </h4>
 
 <div align="center">
-  <img alt="Boards" width="60%" src="media/image.png"/>
+  <img alt="Boards" width="70%" src="media/taskboard.png"/>
 </div>
 
 
