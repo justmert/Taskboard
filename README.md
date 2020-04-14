@@ -13,7 +13,7 @@
 
 ## Description
 
-By utilizing a simple and minimal usage syntax, that requires a flat learning curve, **Taskbook** helps you to effectively manage your tasks and notes and code snippets across multiple boards from within your terminal. All Data has stored locally so never shared with anyone or anything. Deleted items are automatically archived and can be inspected or restored at any moment.
+By utilizing a simple and minimal usage syntax, that requires a flat learning curve, **Taskboard** helps you to effectively manage your tasks and notes and code snippets across multiple boards from within your terminal. All Data has stored locally so never shared with anyone or anything. Deleted items are automatically archived and can be inspected or restored at any moment.
 
 ## Highlights
 
@@ -41,9 +41,6 @@ By utilizing a simple and minimal usage syntax, that requires a flat learning cu
 - [Views](#views)
 - [Configuration](#configuration)
 - [Flight Manual](#flight-manual)
-- [Development](#development)
-- [Related](#related)
-- [Team](#team)
 - [License](#license)
 
 ## Install
@@ -108,14 +105,14 @@ Usage
       editcon 3
       findcon 10 print
 
-      Other commands don't need arguments so you can try them out easily
+    Other commands don't need arguments so you can try them out easily
 ```
 
 ## Views
 
 ### Board View
 
-Invoking taskbook without any options will display `My Board`.
+Invoking taskboard without any options will display `My Board`. If you want to list all items with their corresponding boards, use `list`/`l` option.
 
 ### Timeline View
 
@@ -123,7 +120,7 @@ In order to display all items in a timeline view, based on their creation date, 
 
 ## Configuration
 
-To configure taskbook navigate to the `~/.taskboard.json` file and modify any of the options to match your own preference. To reset back to the default values, simply delete the config file from your home directory.
+To configure taskboard navigate to the `~/.taskboard.json` file and modify any of the options to match your own preference. To reset back to the default values, simply delete the config file from your home directory.
 
 The following illustrates all the available options with their respective default values.
 
@@ -142,10 +139,7 @@ The following is a minor walkthrough containing a set of examples on how to use 
 To create a new task use the `task`/`t` option with your task's description following right after.
 
 ```
-$ t Update Readme.md
-### Display Timeline
-
-In order to display
+$ Taskboard: Update Readme.md
 ```
 
 ### Create Note
@@ -153,12 +147,12 @@ In order to display
 To create a new note use the `note`/`n` option with your note's body following right after.
 
 ```
-Taskboard: n Thinking: the talking of the soul with itself -Plato 
+Taskboard: n Life must be lived as play -Plato 
 ```
 
 ### Create Snippet
 
-To create a new code snippet use the `snippet`/`sn` option with your snippet'a body following right after. After than you will sended to your editor which is set by $EDITOR variable in command line. If $EDITOR value is empty, then Taskboard will search other editors in your system and open that when finds it.
+To create a new code snippet use the `snippet`/`sn` option with your snippet'a body following right after.You will be sent to your editor which is set by $EDITOR variable in your system. If $EDITOR value is empty, Taskboard will search other editors in your system and open that when finds it.
 
 ```
 Taskboard: sn Code for updating Arch mirrors @arch
@@ -222,7 +216,7 @@ Taskboard: d 1 2
 
 ### Copy Item Description
 
-To copy to your system's clipboard the description of one or more items, use the `copy`/`y` option followed by the id of the target item.
+To copy to your system's clipboard the description of an item, use the `copy`/`y` option followed by the id of the target item.
 
 ``` 
 Taskboard: copy 1 
@@ -245,33 +239,15 @@ To update the priority level of a specific task after its creation, use the `pri
 - `3` - High priority
 
 ```
-$ p 5 *3
+Taskboard: p 5 *3
 ```
 
-<!-- 
-### Display Timeline
-
-In order to display all items in a timeline view, based on their creation date, the `--timeline`/`-i` option can be used. -->
-
-```
-$ tl
-```
-
-<!-- 
-### Delete Checked Tasks
-
-To delete/clear all complete tasks at once across all boards, use the `cl/clear` option. Note that all deleted tasks are automatically archived, and can be inspected or restored at any moment. In order to discourage any possible accidental usage, the `--clear` option has no available shorter alias.
-
-```
-$ clear
-``` -->
-
-<!-- ### Display Archive
+### Display Archive
 
 To display all archived items, use the `archive`/`a` option.
 
 ```
-$ archive
+Taskboard: archive
 ```
 
 ### Restore Items
@@ -279,54 +255,76 @@ $ archive
 To restore one or more items, use the `restore`/`r` option followed by the ids of the target items. 
 
 ```
-$ r 4 2
+Taskboard: r 4 2
 ```
 
-### Display Boards
+### Refactor Items
 
-Invoking taskbook without any options will display all of saved items grouped into their respective boards.
-
+To reset all items' ids, use the `refactor/rf` option. This option will renumber items starting from 0.  
 ```
-$ Taskboard: [enter or input any unrecognized argument]
-```
-### List Items
-
-To list a group of items where each item complies with a specific set of attributes, use the `--list`/`-l` option followed by the desired attributes. Board names along with item traits can be considered valid listing attributes. For example to list all items that belong to the default `myboard` and are pending tasks, the following could be used;
-
-```
-$ tb -l myboard pending
+Taskboard: refactor
 ```
 
-The by default supported listing attributes, together with their respective aliases, are the following;
 
-- `myboard` - Items that belong to `My board`
-- `task`, `tasks`, `todo` - Items that are tasks.
-- `note`, `notes` - Items that are notes.
-- `pending`, `unchecked`, `incomplete` - Items that are pending tasks.
-- `progress`, `started`, `begun` - Items that are in-progress tasks.
-- `done`, `checked`, `complete` - Items that complete tasks.
-- `star`, `starred` - Items that are starred.
+### Clear Items
 
-## Development
+This option will delete checked items and archive. Also note that it will refactor after deleting so you don't need to trigger `refactor` option  
+```
+Taskboard: clear 
+```
 
-For more info on how to contribute to the project, please read the [contributing guidelines](https://github.com/klaussinani/taskbook/blob/master/contributing.md).
+### View Code Snippet
 
-- Fork the repository and clone it to your machine
-- Navigate to your local fork: `cd taskbook`
-- Install the project dependencies: `npm install` or `yarn install`
-- Lint the code for errors: `npm test` or `yarn test`
+To display content of the code snippet, use the `view/v` option. 
+```
+Taskboard: v 3 
+```
 
-## Related
+### Attach Item To Board
 
-- [signale](https://github.com/klaussinani/signale) - Highly configurable logging utility
-- [qoa](https://github.com/klaussinani/qoa) - Minimal interactive command-line prompts
-- [hyperocean](https://github.com/klaussinani/hyperocean) - Deep oceanic blue Hyper terminal theme
+To add an item to a board, use `attach/at` option followed by ids of the items followed by board name. This will add specified items to the specified board.   
 
-## Team
+```
+Taskboard: at 3 5 coding 
+```
 
-- Klaus Sinani [(@klaussinani)](https://github.com/klaussinani)
-- Mario Sinani [(@mariosinani)](https://github.com/mariosinani)
+### Copy Snippet Content
+
+To copy to your system's clipboard the content of the code snippet, use the `copycon`/`cc` option followed by the id of the target snippet.
+
+``` 
+Taskboard: cc 3 
+```
+
+### Edit Snippet Content
+
+To edit a snippet's content use the `editcon`/`ec` option followed by the id of target snippet. You will be sent to your favourite editor to edit snippet's content. When you finish editing, you can save and exit from the editor.
+
+``` 
+Taskboard: ec 4 
+```
+
+### Search in Snippet Content
+
+To search a keyword in snippets' contents, use the `findcon`/`fc` option, followed by your search term. This will print all matched result with their corresponding snippet description.
+
+``` 
+Taskboard: fc if 
+```
+
+### Switch to Board
+
+To switch to specific board, use `switch/sw` option followed by board name. This will display that specific board and adding items will automatically set to that board. If board name is left blank, Taskboard will switch to `My board`.  
+
+
+``` 
+Taskboard: sw coding 
+```
+
+## Thanks
+
+Thanks to [klaussinani](https://github.com/klaussinani) and his amazing work [taskbook](https://github.com/klaussinani/taskbook) for inspiring me while doing this project.
 
 ## License
 
-[MIT](https://github.com/klaussinani/taskbook/blob/master/license.md) -->
+[MIT](https://github.com/Marceliny/Taskboard/blob/master/LICENSE.txt) 
