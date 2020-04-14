@@ -7,7 +7,7 @@
 </h4>
 
 <div align="center">
-  <img alt="Boards" width="60%" src="media/taskboard.png"/>
+  <img alt="Boards" width="60%" src="media/image.png"/>
 </div>
 
 
@@ -143,6 +143,9 @@ To create a new task use the `task`/`t` option with your task's description foll
 
 ```
 $ t Update Readme.md
+### Display Timeline
+
+In order to display
 ```
 
 ### Create Note
