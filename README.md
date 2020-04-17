@@ -63,7 +63,7 @@ Usage
     e  - edit        •    Edit item description
     d  - delete      •    Delete an item
     f  - find        •    Search in item's descriptions
-    s  - star        •    Star/unstart item
+    s  - star        •    Star/unstar item
     p  - priority    •    Update priority of an item (*1, *2, *3)
     m  - move        •    Move item between boards
     l  - list        •    List boards with their items
